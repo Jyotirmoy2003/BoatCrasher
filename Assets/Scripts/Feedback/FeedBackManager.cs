@@ -59,17 +59,20 @@ public class FeedBackManager : MonoBehaviour
                 tempInsteanceOfFeedback.Add(tempHoldingFeedback);
         }
     }
+    [NaughtyAttributes.Button]
     public void PlayFeedback()
     {
-        if(feedbackList.Count<=0){
+        if (feedbackList.Count <= 0)
+        {
             Debug.Log("No feedback to play");
             return;
         }
-        if(isSequencialFlow)
+        if (isSequencialFlow)
         {
-            playingFeedbackIndexForSeq=startIndex;
+            playingFeedbackIndexForSeq = startIndex;
             InitiateFeedbackseq();
-        }else
+        }
+        else
             InitiateFeedback();
     }
 

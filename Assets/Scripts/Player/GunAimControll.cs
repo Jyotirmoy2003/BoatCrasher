@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class GunAimControl : MonoBehaviour
 {
+    [SerializeField] Transform gunFirepoint;
+    [SerializeField] float rayDistance = 10f;
+    private IDamageable nullDmageable= new BoatParts();
+
     [Header("References")]
     public Joystick joystick;           // Joystick for input
     public Transform gunPivot;          // The pivot (gun base or holder)
@@ -16,6 +20,14 @@ public class GunAimControl : MonoBehaviour
     private Vector2 currentRotation; // Y = yaw, Z = tilt
 
     void Update()
+    {
+
+        JoysticInput();
+
+        CheckForDamageable();
+    }
+
+    private void JoysticInput()
     {
         if (joystick == null || gunPivot == null)
             return;
@@ -36,5 +48,30 @@ public class GunAimControl : MonoBehaviour
 
         // Apply rotation: Yaw (Y axis), Tilt (Z axis)
         gunPivot.localRotation = Quaternion.Euler(0f, currentRotation.x, currentRotation.y);
+    }
+
+    
+
+    private void CheckForDamageable()
+    {
+        if (gunFirepoint == null) return;
+
+        Ray ray = new Ray(gunFirepoint.position, gunFirepoint.forward);
+        if (Physics.Raycast(ray, out RaycastHit hit, rayDistance, ~_GameAssets.Instance.gunAimIgnoreLayermask))
+        {
+            var damageable = hit.collider.GetComponent<IDamageable>();
+            if (damageable != null)
+            {
+                _GameAssets.Instance.OnGunAimAtAction?.Invoke(damageable);
+            }
+            else
+            {
+                _GameAssets.Instance.OnGunAimAtAction?.Invoke(nullDmageable);
+            }
+        }
+        else
+        {
+            _GameAssets.Instance.OnGunAimAtAction?.Invoke(nullDmageable);
+        }
     }
 }

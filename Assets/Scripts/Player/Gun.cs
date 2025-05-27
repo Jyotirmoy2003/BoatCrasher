@@ -10,8 +10,7 @@ public class Gun : MonoBehaviour
     public float bulletVelocity = 20f;
 
     private bool isShooting = false;
-    [SerializeField] float rayDistance = 10f;
-    private IDamageable nullDmageable= new BoatParts();
+   
 
 
 
@@ -70,31 +69,5 @@ public class Gun : MonoBehaviour
 
 
 
-    void Update()
-    {
-        CheckForDamageable();
-    }
-
-    private void CheckForDamageable()
-    {
-        if (firePoint == null) return;
-
-        Ray ray = new Ray(firePoint.position, firePoint.forward);
-        if (Physics.Raycast(ray, out RaycastHit hit, rayDistance, ~_GameAssets.Instance.gunAimIgnoreLayermask))
-        {
-            var damageable = hit.collider.GetComponent<IDamageable>();
-            if (damageable != null)
-            {
-                _GameAssets.Instance.OnGunAimAtAction?.Invoke(damageable);
-            }
-            else
-            {
-                _GameAssets.Instance.OnGunAimAtAction?.Invoke(nullDmageable);
-            }
-        }
-        else
-        {
-            _GameAssets.Instance.OnGunAimAtAction?.Invoke(nullDmageable);
-        }
-    }
+    
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[RequireComponent(typeof (Outline))]
+
 public class BoatParts : MonoBehaviour, IDamageable
 {
     [SerializeField] private Outline outline;
